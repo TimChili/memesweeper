@@ -20,12 +20,17 @@
  ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
+#include "SpriteCodex.h"
+#include "Vei2.h"
 
-Game::Game( MainWindow& wnd )
+
+Game::Game(MainWindow& wnd)
 	:
-	wnd( wnd ),
-	gfx( wnd )
+	wnd(wnd),
+	gfx(wnd),
+	grd(gfx)
 {
+	
 }
 
 void Game::Go()
@@ -42,4 +47,7 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
+	Vei2 Trunpet(0, 0);
+	SpriteCodex::DrawTileButton(Trunpet, gfx);
+	grd.GridDraw(gfx);
 }

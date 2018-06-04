@@ -1,0 +1,15 @@
+
+
+Create a Grid
+
+Initiate grid.
+	Is empty / Bomb / Blown Bomb / Number /Blank
+	Randomise bomb locations * Number not on another bomb.
+	Check for bomb locations in 8 directions.
+		Corner and side cases.
+
+Mouse Control.
+Timer.
+Game Start End
+
+		
