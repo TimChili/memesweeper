@@ -2,6 +2,7 @@
 #include "Vei2.h"
 #include "Graphics.h"
 #include "SpriteCodex.h"
+#include <random>
 
 
 class Grid
@@ -9,14 +10,19 @@ class Grid
 public:
 	Grid(Graphics& gfx);
 	void GridDraw(Graphics& gfx) const;
+	void GenerateRandomBombs();
+
 
 private:
+	//Block Stuff
 	struct Block
 	{
 		int BombsNear;
 		bool IsBomb;
+		enum rbClick {IsUnmarked, IsMarked, IsFlagged};
 		bool IsRevealed;
 		Vei2 loc;
+		Color c;
 	};
 	static constexpr int width = 10;
 	static constexpr int height = 10;
@@ -26,4 +32,14 @@ private:
 	static const int GridShiftY = BlockHeightPix * 2;
 	Block Blocks[width*height];
 	Color Grey = { 70,70,70 };
+	Color cBomb = { 255,0,0 };
+	
+	
+	//Bomb Stuff
+	std::random_device rd;
+	std::mt19937 rng;
+	std::uniform_int_distribution<int> DistBomb;
+	static constexpr int InitialBombs = 20;
+	int RemainingBombs;
+
 };
