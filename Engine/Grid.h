@@ -9,8 +9,10 @@ class Grid
 {
 public:
 	Grid(Graphics& gfx);
-	void GridDraw(Graphics& gfx) const;
+	bool GridLocIsValidIsBomb(const int x,const int y);
 	void GenerateRandomBombs();
+	void GenerateNumbers();
+	void GridDraw(Graphics& gfx) const;
 
 
 private:
@@ -21,6 +23,7 @@ private:
 		bool IsBomb;
 		enum rbClick {IsUnmarked, IsMarked, IsFlagged};
 		bool IsRevealed;
+		Vei2 gridloc;
 		Vei2 loc;
 		Color c;
 	};

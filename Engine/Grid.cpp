@@ -11,6 +11,7 @@ Grid::Grid(Graphics & gfx)
 				//  y*width+x = k
 				// (x-k)/width = y
 				// -(y*width-k) = x
+				Blocks[j*width + i].gridloc = Vei2(i,j);
 				Blocks[j*width+i].loc = Vei2(i*BlockWidthPix+GridShiftX,j*BlockHeightPix+GridShiftY);
 				Blocks[j*width + i].IsBomb = false;
 				Blocks[j*width + i].IsRevealed = false;
@@ -19,14 +20,61 @@ Grid::Grid(Graphics & gfx)
 		}
 	RemainingBombs = InitialBombs;
 	GenerateRandomBombs();
-
+	GenerateNumbers();
 }
+
+bool Grid::GridLocIsValidIsBomb(const int x, const int y)
+{
+	if (x*y >= 0 && x*y <= width * height)
+	{
+		if (Blocks[y*width +x].gridloc.x == x && Blocks[y*width + x].gridloc.y == y && Blocks[y*width + x].IsBomb == true)
+			return true;
+		else
+			return false;
+	}
+	else
+		return false;
+}
+
 
 void Grid::GridDraw(Graphics & gfx) const
 {
 	for (int i = 0; i < width*height; i++)
 	{
-		gfx.DrawRect(Blocks[i].loc.x, Blocks[i].loc.y, Blocks[i].loc.x +BlockWidthPix - 1, Blocks[i].loc.y + BlockHeightPix - 1, Blocks[i].c);
+		gfx.DrawRect(Blocks[i].loc.x, Blocks[i].loc.y, Blocks[i].loc.x + BlockWidthPix - 1, Blocks[i].loc.y + BlockHeightPix - 1, Blocks[i].c);
+		if (Blocks[i].IsBomb == false)
+		{
+			switch (Blocks[i].BombsNear)
+			{
+			case 0:
+				SpriteCodex::DrawTile0(Blocks[i].loc, gfx);
+				break;
+			case 1:
+				SpriteCodex::DrawTile1(Blocks[i].loc, gfx);
+				break;
+			case 2:
+				SpriteCodex::DrawTile2(Blocks[i].loc, gfx);
+				break;
+			case 3:
+				SpriteCodex::DrawTile3(Blocks[i].loc, gfx);
+				break;
+			case 4:
+				SpriteCodex::DrawTile4(Blocks[i].loc, gfx);
+				break;
+			case 5:
+				SpriteCodex::DrawTile5(Blocks[i].loc, gfx);
+				break; 
+			case 6:
+				SpriteCodex::DrawTile6(Blocks[i].loc, gfx);
+				break; 
+			case 7:
+				SpriteCodex::DrawTile7(Blocks[i].loc, gfx);
+				break;
+			case 8:
+				SpriteCodex::DrawTile8(Blocks[i].loc, gfx);
+				break;
+			}
+		}
 	}
 }
 
@@ -47,5 +95,33 @@ void Grid::GenerateRandomBombs()
 		} while (latch == false);
 	}
 
+}
+
+void Grid::GenerateNumbers()
+{
+	for (int i = 0; i < width*height; i++)
+	{
+		int x = Blocks[i].gridloc.x;
+		int y = Blocks[i].gridloc.y;
+		int tally = 0;
+		//8 Directions
+		if (GridLocIsValidIsBomb(x - 1, y - 1))
+			tally++;
+		if (GridLocIsValidIsBomb(x, y - 1))
+			tally++;
+		if (GridLocIsValidIsBomb(x + 1, y - 1))
+			tally++;
+		if (GridLocIsValidIsBomb(x - 1, y))
+			tally++; 
+		if (GridLocIsValidIsBomb(x + 1,y))
+			tally++;
+		if (GridLocIsValidIsBomb(x - 1, y +1))
+			tally++;
+		if (GridLocIsValidIsBomb(x, y + 1))
+			tally++;
+		if (GridLocIsValidIsBomb(x + 1, y +1))
+			tally++;
+		Blocks[i].BombsNear = tally;
+	}
 }
 
