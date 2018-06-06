@@ -43,6 +43,7 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	grd.MouseClickManager(wnd.mouse);
 }
 
 void Game::ComposeFrame()

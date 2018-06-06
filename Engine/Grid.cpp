@@ -14,7 +14,7 @@ Grid::Grid(Graphics & gfx)
 				Blocks[j*width + i].gridloc = Vei2(i,j);
 				Blocks[j*width+i].loc = Vei2(i*BlockWidthPix+GridShiftX,j*BlockHeightPix+GridShiftY);
 				Blocks[j*width + i].IsBomb = false;
-				Blocks[j*width + i].IsRevealed = false;
+				Blocks[j*width + i].IsHidden;
 				Blocks[j*width + i].BombsNear = 0;
 				Blocks[j*width + i].c = Grey;
 		}
@@ -123,5 +123,37 @@ void Grid::GenerateNumbers()
 			tally++;
 		Blocks[i].BombsNear = tally;
 	}
+}
+
+void Grid::MouseClickManager(const Mouse & mouse)
+{
+	if (mouse.LeftIsPressed())
+	{
+		int i = ClickLocator(mouse.GetPosX(), mouse.GetPosY());
+		if (i >= 0)
+		{
+
+			Blocks[i].IsRevealed;
+			Blocks[i].c = Greenish;
+
+		}
+	}
+}
+
+int Grid::ClickLocator(const int x, const int y)
+{
+	bool latch = true;
+	for (int i = 0; i < width*height; i++)
+	{
+		if (x > Blocks[i].loc.x && y > Blocks[i].loc.y &&  x < Blocks[i].loc.x + BlockWidthPix && y < Blocks[i].loc.y + BlockHeightPix)
+		{
+			return i;
+			latch = false;
+		}
+	}
+		if (latch == true)
+		{
+			return (-1);
+		}
 }
 

@@ -3,6 +3,7 @@
 #include "Graphics.h"
 #include "SpriteCodex.h"
 #include <random>
+#include "Mouse.h"
 
 
 class Grid
@@ -12,8 +13,12 @@ public:
 	bool GridLocIsValidIsBomb(const int x,const int y);
 	void GenerateRandomBombs();
 	void GenerateNumbers();
-	void GridDraw(Graphics& gfx) const;
+	void MouseClickManager(const Mouse&  mouse); //wip
+	int ClickLocator(const int x, const int y);  //wip
+	void g();
 
+	void GridDraw(Graphics& gfx) const;
+	
 
 private:
 	//Block Stuff
@@ -21,8 +26,7 @@ private:
 	{
 		int BombsNear;
 		bool IsBomb;
-		enum rbClick {IsUnmarked, IsMarked, IsFlagged};
-		bool IsRevealed;
+		enum rbClick { IsHidden, IsRevealed, IsMarked, IsQuestioned };
 		Vei2 gridloc;
 		Vei2 loc;
 		Color c;
@@ -36,6 +40,7 @@ private:
 	Block Blocks[width*height];
 	Color Grey = { 70,70,70 };
 	Color cBomb = { 255,0,0 };
+	Color Greenish = { 25,200,25 };
 	
 	
 	//Bomb Stuff
