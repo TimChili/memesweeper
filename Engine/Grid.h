@@ -13,8 +13,8 @@ public:
 	bool GridLocIsValidIsBomb(const int x,const int y);
 	void GenerateRandomBombs();
 	void GenerateNumbers();
-	void MouseClickManager(const Mouse&  mouse); //wip
-	int ClickLocator(const int x, const int y);  //wip
+	void MouseClickManager(const Mouse&  mouse); 
+	int ClickLocator(const int x, const int y);  
 	void g();
 
 	void GridDraw(Graphics& gfx) const;
@@ -22,11 +22,12 @@ public:
 
 private:
 	//Block Stuff
+	enum rbClick { IsHidden, IsRevealed, IsMarked, IsQuestioned };
 	struct Block
 	{
 		int BombsNear;
 		bool IsBomb;
-		enum rbClick { IsHidden, IsRevealed, IsMarked, IsQuestioned };
+		rbClick state;
 		Vei2 gridloc;
 		Vei2 loc;
 		Color c;

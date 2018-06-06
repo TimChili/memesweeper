@@ -9,6 +9,7 @@ Initiate grid.
 		Corner and side cases.
 
 Mouse Control.
+	reveal 8 around every blank tile - and repeat.
 Timer.
 Game Start End
 

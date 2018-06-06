@@ -14,7 +14,7 @@ Grid::Grid(Graphics & gfx)
 				Blocks[j*width + i].gridloc = Vei2(i,j);
 				Blocks[j*width+i].loc = Vei2(i*BlockWidthPix+GridShiftX,j*BlockHeightPix+GridShiftY);
 				Blocks[j*width + i].IsBomb = false;
-				Blocks[j*width + i].IsHidden;
+				Blocks[j*width + i].state = IsHidden;
 				Blocks[j*width + i].BombsNear = 0;
 				Blocks[j*width + i].c = Grey;
 		}
@@ -42,7 +42,7 @@ void Grid::GridDraw(Graphics & gfx) const
 	for (int i = 0; i < width*height; i++)
 	{
 		gfx.DrawRect(Blocks[i].loc.x, Blocks[i].loc.y, Blocks[i].loc.x + BlockWidthPix - 1, Blocks[i].loc.y + BlockHeightPix - 1, Blocks[i].c);
-		if (Blocks[i].IsBomb == false)
+		if (Blocks[i].IsBomb == false && Blocks[i].state == IsRevealed)
 		{
 			switch (Blocks[i].BombsNear)
 			{
@@ -74,6 +74,10 @@ void Grid::GridDraw(Graphics & gfx) const
 				SpriteCodex::DrawTile8(Blocks[i].loc, gfx);
 				break;
 			}
+		}
+		if (Blocks[i].IsBomb == true && Blocks[i].state == IsRevealed)
+		{
+			SpriteCodex::DrawTileBomb(Blocks[i].loc, gfx);
 		}
 	}
 }
@@ -133,8 +137,8 @@ void Grid::MouseClickManager(const Mouse & mouse)
 		if (i >= 0)
 		{
 
-			Blocks[i].IsRevealed;
-			Blocks[i].c = Greenish;
+			Blocks[i].state = IsRevealed;
+			//Blocks[i].c = Greenish;
 
 		}
 	}
