@@ -10,9 +10,13 @@ class Grid
 {
 public:
 	Grid(Graphics& gfx);
+	bool GridLocIsValid(const int x, const int y);
 	bool GridLocIsValidIsBomb(const int x,const int y);
 	void GenerateRandomBombs();
 	void GenerateNumbers();
+	void RevealAroundBlank(const int x, const int y);
+	void BlankRecall(const int x, const int y);
+	void BlankCall(const int i);
 	void MouseClickManager(const Mouse&  mouse); 
 	int ClickLocator(const int x, const int y);  
 	void g();

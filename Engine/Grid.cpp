@@ -23,6 +23,19 @@ Grid::Grid(Graphics & gfx)
 	GenerateNumbers();
 }
 
+bool Grid::GridLocIsValid(const int x, const int y)
+{
+	if (x*y >= 0 && x*y <= width * height)
+	{
+		if (Blocks[y*width + x].gridloc.x == x && Blocks[y*width + x].gridloc.y == y && Blocks[y*width + x].state == IsHidden)
+			return true;
+		else
+			return false;
+	}
+	else
+		return false;
+}
+
 bool Grid::GridLocIsValidIsBomb(const int x, const int y)
 {
 	if (x*y >= 0 && x*y <= width * height)
@@ -129,17 +142,49 @@ void Grid::GenerateNumbers()
 	}
 }
 
+void Grid::RevealAroundBlank(int x, int y)
+{
+	//8Directions
+	BlankRecall(x - 1, y - 1);
+	BlankRecall(x, y - 1);
+	BlankRecall(x + 1, y - 1);
+
+	BlankRecall(x - 1, y);
+	BlankRecall(x + 1, y);
+
+	BlankRecall(x - 1, y + 1);
+	BlankRecall(x, y + 1);
+	BlankRecall(x + 1, y + 1);
+}
+
+void Grid::BlankRecall(const int tx, const int ty)
+{
+	if (GridLocIsValid(tx, ty))
+	{
+		int w = (ty)*width + tx;
+		Blocks[w].state = IsRevealed;
+		BlankCall(w);
+	}
+}
+
+void Grid::BlankCall(const int i)
+{
+	if (Blocks[i].BombsNear == 0 && Blocks[i].IsBomb == false)
+	{
+		RevealAroundBlank(Blocks[i].gridloc.x, Blocks[i].gridloc.y);
+	}
+}
+
 void Grid::MouseClickManager(const Mouse & mouse)
 {
 	if (mouse.LeftIsPressed())
 	{
 		int i = ClickLocator(mouse.GetPosX(), mouse.GetPosY());
-		if (i >= 0)
+		if (i >= 0 && Blocks[i].state == IsHidden)
 		{
-
 			Blocks[i].state = IsRevealed;
 			//Blocks[i].c = Greenish;
-
+			BlankCall(i);
 		}
 	}
 }
