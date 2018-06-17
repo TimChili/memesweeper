@@ -88,6 +88,10 @@ void Grid::GridDraw(Graphics & gfx) const
 				break;
 			}
 		}
+		if (Blocks[i].state == IsMarked)
+		{
+			SpriteCodex::DrawTileFlag(Blocks[i].loc, gfx);
+		}
 		if (Blocks[i].IsBomb == true && Blocks[i].state == IsRevealed)
 		{
 			SpriteCodex::DrawTileBomb(Blocks[i].loc, gfx);
@@ -106,7 +110,7 @@ void Grid::GenerateRandomBombs()
 			if (!Blocks[x].IsBomb)
 			{
 				Blocks[x].IsBomb = true;
-				Blocks[x].c = cBomb;
+				Blocks[x].c = Grey;
 				latch = true;
 			}
 		} while (latch == false);
@@ -163,6 +167,7 @@ void Grid::BlankRecall(const int tx, const int ty)
 	{
 		int w = (ty)*width + tx;
 		Blocks[w].state = IsRevealed;
+		Blocks[w].c = DarkGrey;
 		BlankCall(w);
 	}
 }
@@ -175,16 +180,35 @@ void Grid::BlankCall(const int i)
 	}
 }
 
-void Grid::MouseClickManager(const Mouse & mouse)
+void Grid::MouseClickManager(Mouse & mouse)
 {
-	if (mouse.LeftIsPressed())
+	while (!mouse.IsEmpty())
 	{
-		int i = ClickLocator(mouse.GetPosX(), mouse.GetPosY());
-		if (i >= 0 && Blocks[i].state == IsHidden)
+		const auto e = mouse.Read();
+		if (e.GetType() == Mouse::Event::Type::LPress)
 		{
-			Blocks[i].state = IsRevealed;
-			//Blocks[i].c = Greenish;
-			BlankCall(i);
+			int i = ClickLocator(e.GetPosX(), e.GetPosY());
+			if (i >= 0 && Blocks[i].state == IsHidden)
+			{
+				Blocks[i].state = IsRevealed;
+				Blocks[i].c = DarkGrey;
+				BlankCall(i);
+				if (Blocks[i].IsBomb == true)
+					Blocks[i].c = cBomb;
+			}
+		}
+		if (e.GetType() == Mouse::Event::Type::RPress)
+		{
+			int i = ClickLocator(e.GetPosX(), e.GetPosY());
+
+			if (i >= 0 && Blocks[i].state == IsHidden)
+			{
+				Blocks[i].state = IsMarked;
+			}
+			else if (i >= 0 && Blocks[i].state == IsMarked)
+			{
+				Blocks[i].state = IsHidden;
+			}
 		}
 	}
 }

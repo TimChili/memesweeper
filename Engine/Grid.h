@@ -17,7 +17,7 @@ public:
 	void RevealAroundBlank(const int x, const int y);
 	void BlankRecall(const int x, const int y);
 	void BlankCall(const int i);
-	void MouseClickManager(const Mouse&  mouse); 
+	void MouseClickManager(Mouse&  mouse); 
 	int ClickLocator(const int x, const int y);  
 	void g();
 
@@ -36,14 +36,15 @@ private:
 		Vei2 loc;
 		Color c;
 	};
-	static constexpr int width = 10;
-	static constexpr int height = 10;
+	static constexpr int width = 12;
+	static constexpr int height = 12;
 	static constexpr int BlockWidthPix = 30;
 	static constexpr int BlockHeightPix = 30;
 	static const int GridShiftX = (Graphics::ScreenWidth / 2) - (width*BlockWidthPix / 2);// plus half screen width minus board width
 	static const int GridShiftY = BlockHeightPix * 2;
 	Block Blocks[width*height];
 	Color Grey = { 70,70,70 };
+	Color DarkGrey = { 120,120,120 };
 	Color cBomb = { 255,0,0 };
 	Color Greenish = { 25,200,25 };
 	
